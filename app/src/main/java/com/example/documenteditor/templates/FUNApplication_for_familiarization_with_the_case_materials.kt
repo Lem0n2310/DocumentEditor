@@ -1,0 +1,59 @@
+package com.example.documenteditor.templates
+
+import com.example.documenteditor.getFile
+import com.example.documenteditor.textChange
+import org.apache.poi.xwpf.usermodel.XWPFDocument
+import java.io.FileInputStream
+import java.io.FileOutputStream
+
+// Ходатайство об ознакомлении
+fun ApplicationForFamiliarizationWithTheCaseMaterials(
+    userSaveWay: String,
+    name: String,
+    where: String,
+    role: String,
+    applicant: String,
+    applicantInit: String,
+    caseNum: String,
+    phoneNum: String,
+    ){
+    // Создание файла
+    val workFile = getFile("RBA pattern.docx", userSaveWay = userSaveWay, name = name)
+
+    // Заведение всех данных
+
+
+    // Словарь для замены
+    var replace = mapOf(
+        "КУДА" to where,
+        "ДЕЛО" to caseNum,
+        "НОМЕР" to phoneNum,
+        "ЗИН" to applicantInit
+    )
+
+    // Замена по таблицам
+    val document = XWPFDocument(FileInputStream(workFile))
+
+    // Замена по таблицам
+    val table1 = document.tables[0]
+    table1.getRow(0).getCell(1).text = where
+    table1.getRow(2).getCell(0).text = role
+    table1.getRow(2).getCell(1).text = applicant
+    table1.getRow(4).getCell(1).text = caseNum
+
+    val table2 = document.tables[1]
+    table2.getRow(0).getCell(1).text = where
+    table2.getRow(2).getCell(0).text = role
+    table2.getRow(2).getCell(1).text = applicant
+    table2.getRow(4).getCell(1).text = caseNum
+
+    // Замена по тексту
+    textChange(document, replace)
+
+    FileOutputStream(workFile).use{fos ->
+        document.write(fos)
+    }
+
+    document.close()
+}
+
