@@ -8,21 +8,14 @@ import java.io.FileOutputStream
 
 // Ходатайство об ознакомлении
 fun ApplicationForFamiliarizationWithTheCaseMaterials(
-    userSaveWay: String,
-    name: String,
+    document: XWPFDocument,
     where: String,
     role: String,
     applicant: String,
     applicantInit: String,
     caseNum: String,
     phoneNum: String,
-    ){
-    // Создание файла
-    val workFile = getFile("RBA pattern.docx", userSaveWay = userSaveWay, name = name)
-
-    // Заведение всех данных
-
-
+    ): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(
         "КУДА" to where,
@@ -30,9 +23,6 @@ fun ApplicationForFamiliarizationWithTheCaseMaterials(
         "НОМЕР" to phoneNum,
         "ЗИН" to applicantInit
     )
-
-    // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
 
     // Замена по таблицам
     val table1 = document.tables[0]
@@ -50,10 +40,6 @@ fun ApplicationForFamiliarizationWithTheCaseMaterials(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }
 

@@ -8,8 +8,7 @@ import java.io.FileOutputStream
 
 
 fun aftei(
-    userSaveWay: String,
-    name:String,
+    document: XWPFDocument,
     where :String,
     role :String,
     applicant :String,
@@ -18,10 +17,7 @@ fun aftei(
     text :String,
     listApp :String,
     applicantInit :String,
-){
-    // Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
-
+): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(
         "ОЧЕМ" to about,
@@ -29,8 +25,6 @@ fun aftei(
         "ЗИН" to applicantInit
     )
     // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
-
     val table1 = document.tables[0]
     table1.getRow(0).getCell(1).text = where
     table1.getRow(2).getCell(0).text = role
@@ -46,9 +40,5 @@ fun aftei(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }
