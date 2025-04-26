@@ -12,6 +12,7 @@ data class DocumentField(
 @Serializable
 data class DocumentTemplate(
     val id: Int, // Номер шаблона
-    val name: String, // Имя шаблона
+    val nameForUser: String, // Имя шаблона
+    val nameForDevelop: String,
     val fields: List<DocumentField> // Поля шаблона
 )

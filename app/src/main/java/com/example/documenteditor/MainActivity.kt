@@ -1,10 +1,13 @@
 
 package com.example.documenteditor
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.rememberScrollableState
@@ -47,7 +50,7 @@ import kotlinx.serialization.Serializable
 import javax.xml.transform.Templates
 // Единственная Мэйн Активити
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -77,9 +80,10 @@ fun MyNav(){
                 navController = navController
             )
         }
-        composable<TemplateRoute> {
-            val templateId = it.toRoute<TemplateRoute>().templateId // Отрисовка звполнения шаблонов
-            Template(templateId = templateId , templates = templates, navController = navController)
+        composable<TemplateRoute> {// Отрисовка звполнения шаблонов
+            val templateId = it.toRoute<TemplateRoute>().templateId
+            val nameForDev = it.toRoute<TemplateRoute>().nameForDev
+            Template(templateId = templateId , templates = templates, navController = navController, workFile = "templates/$nameForDev")
         }
     }
 }

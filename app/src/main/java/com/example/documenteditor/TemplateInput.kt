@@ -1,17 +1,18 @@
 package com.example.documenteditor
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,16 +29,79 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.documenteditor.templatesFun.ApplicationForInitiationOfSoleProprietorship
+import com.example.documenteditor.templatesFun.incasso
+import com.example.documenteditor.templatesFun.test
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: NavHostController) {
+fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: NavHostController, workFile: String) {
     // Хранение значений полей в виде карты (ключ - id поля, значение - введенное пользователем значение)
     val fieldValues = remember { mutableStateMapOf<String, String>() }
-
+    val context = LocalContext.current
     var selectedTemplate by remember { mutableStateOf(templates[templateId]) }
+    val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
+        if (uri != null){
+            val templateDocument = XWPFDocument(context.assets.open(workFile))
+            val document = when(selectedTemplate.id){
+                0 -> {
+                    incasso(
+                        document = templateDocument,
+                        where= fieldValues["Куда"].toString(),
+                        recover = fieldValues["Взыскатель"].toString(),
+                        recoverInit = fieldValues["Инициалы взыскателя"].toString(),
+                        recoverInfo = fieldValues["Информация о взыскателе"].toString(),
+                        recoverRp = fieldValues["ФИО взыскателя в родительном падеже"].toString(),
+                        debtor = fieldValues["Должник"].toString(),
+                        debtorInfo = fieldValues["Инфа о должнике"].toString(),
+                        listNumber = fieldValues["Номер листа"].toString(),
+                        caseNumber = fieldValues["Номер дела"].toString(),
+                        courtIssue= fieldValues["Каким судом выдан"].toString(),
+                        money = fieldValues["Информация о взыскиваемых средствах"].toString(),
+                        sumMoney = fieldValues["Сумма Долга"].toString(),
+                        requisites =fieldValues["Реквизиты"].toString()
+                    )
+                }
+                1 -> {
+                    ApplicationForInitiationOfSoleProprietorship(
+                        templateDocument,
+                        fieldValues["В какой суд"].toString(),
+                        fieldValues["Взыскатель"].toString(),
+                        fieldValues["Инициалы взыскателя"].toString(),
+                        fieldValues["Информация о взыскателе"].toString(),
+                        fieldValues["Должник"].toString(),
+                        fieldValues["ФИО должника в родительном падеже"].toString(),
+                        fieldValues["Информация о должнике"].toString(),
+                        fieldValues["Инициалы должника"].toString(),
+                        fieldValues["Получатель (по умолчанию взыскатель)"].toString(),
+                        fieldValues["Дата вступления в законную силу"].toString(),
+                        fieldValues["Дата выдачи исполнительного листа"].toString(),
+                        fieldValues["Номер листа и дата"].toString(),
+                        fieldValues["Информация о суде"].toString(),
+                        fieldValues["Номер дела"].toString(),
+                        fieldValues["Полная сумма долга"].toString(),
+                        fieldValues["Сведения о требовании"].toString(),
+                        fieldValues["Реквизиты"].toString(),
+                    )
+                }
+                else -> {
+                    null
+                }
+            }
+
+            context.contentResolver.openOutputStream(uri)?.use {outputStream ->
+                document?.write(outputStream)
+            }
+        }
+    }
+
+    val save: () -> Unit = {
+        createDocumentLauncher.launch(selectedTemplate.nameForUser + ".docx")
+    }
 
     Box(modifier = Modifier.fillMaxSize()
         .background(Color(0xff9DA7E8)),
@@ -45,7 +109,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     ) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 100.dp, bottom = 80.dp)
+            modifier = Modifier.padding(top = 100.dp, bottom = 80.dp).imePadding()
         )
             { // Используем Column для вертикального расположения полей
                 // Проходим по всем полям выбранного шаблона
@@ -66,7 +130,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
 
     // Снэек бар с подписью местонахождения и кнопкой назад
     TopAppBar(
-        title = { Text(selectedTemplate.name) },
+        title = { Text(selectedTemplate.nameForUser) },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xff8192fe),
             titleContentColor =  Color.White,
@@ -82,7 +146,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
             }
         },
         actions = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = { save() }) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null

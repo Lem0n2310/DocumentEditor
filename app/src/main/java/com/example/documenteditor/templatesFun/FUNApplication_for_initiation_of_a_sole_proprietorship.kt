@@ -1,4 +1,4 @@
-package com.example.documenteditor.templates
+package com.example.documenteditor.templatesFun
 
 import com.example.documenteditor.getFile
 import com.example.documenteditor.textChange
@@ -8,8 +8,7 @@ import java.io.FileOutputStream
 
 //Заявление о возбуждении ИП
 fun ApplicationForInitiationOfSoleProprietorship(
-    userSaveWay: String,// Пусть сохранения
-    name:String,//  Имя файла
+    document: XWPFDocument,
     where :String, // В какой суд
     recover :String,//  ФИО взыскателя
     recoverInit :String,// Инициалы взыскателя
@@ -27,11 +26,7 @@ fun ApplicationForInitiationOfSoleProprietorship(
     fulMoney :String,// Полная сумма долга
     infoRequire :String,// Сведения о требовании
     requisites: String,// Реквизиты
-){
-
-
-    // Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
+): XWPFDocument{
 
     val req = mutableMapOf(
         "bank" to "shit",
@@ -58,8 +53,6 @@ fun ApplicationForInitiationOfSoleProprietorship(
         "ПОЛУЧАТЕЛЬ" to  pol
     )
 
-    val document = XWPFDocument(FileInputStream(workFile))
-
     // Замена по таблицам
     val table1 = document.tables[0]
     table1.getRow(0).getCell(1).text = where
@@ -76,9 +69,5 @@ fun ApplicationForInitiationOfSoleProprietorship(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }

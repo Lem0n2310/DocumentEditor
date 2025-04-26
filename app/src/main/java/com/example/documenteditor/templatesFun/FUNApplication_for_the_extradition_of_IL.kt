@@ -1,4 +1,4 @@
-package com.example.documenteditor.templates
+package com.example.documenteditor.templatesFun
 
 import com.example.documenteditor.getFile
 import com.example.documenteditor.textChange

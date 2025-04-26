@@ -2,9 +2,7 @@ package com.example.documenteditor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 // Выбор шаблона
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,13 +34,13 @@ fun TemplatePicker(templates: List<DocumentTemplate>, navController: NavHostCont
         ) {
             item {// Перебираем все шаблоны из templates и под каждого создаем свою кнопку
                 templates.forEach { template ->
-                    Button(onClick = { navController.navigate(TemplateRoute(template.id)) },
+                    Button(onClick = { navController.navigate(TemplateRoute(template.id, template.nameForDevelop)) },
                         colors = ButtonDefaults.buttonColors(
                             contentColor = Color.Black,
                             containerColor = Color.White
                         )
                         ) {
-                        Text(template.name)
+                        Text(template.nameForUser)
                     }
                 }
             }
