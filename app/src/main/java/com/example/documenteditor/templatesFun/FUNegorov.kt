@@ -7,8 +7,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 fun egorov(
-    userSaveWay: String,
-    name: String,
+    document: XWPFDocument,
     where: String,
     address : String,
     firstRole: String,
@@ -20,18 +19,12 @@ fun egorov(
     secondInfo: String,
     caseNumber: String,
     text: String,
-){
-    // Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
-
+): XWPFDocument {
     //Словарь для замены
     val replace = mapOf(
         "ТЕКСТЗАЯВЛЕНИЯ" to text,
         "ЗИН" to applicantInit
     )
-
-    //Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
 
     // Замена по таблицам
     val table1 = document.tables[0]
@@ -53,9 +46,5 @@ fun egorov(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{ fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }

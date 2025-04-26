@@ -7,8 +7,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 
 fun oline(
-    userSaveWay : String,
-    name: String,
+    document:XWPFDocument,
     where : String,
     role : String,
     applicant : String,
@@ -17,11 +16,8 @@ fun oline(
     caseNum: String,
     date: String,
     courtConnect:String
-){
+): XWPFDocument {
     val splitedCourtConnect = courtConnect.split(", ")
-
-    //Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
 
     //Словарь для замены
     val replace = mapOf(
@@ -29,9 +25,6 @@ fun oline(
         "ДАТА" to caseNum,
         "ЗИН" to applicantInit
     )
-
-    // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
 
     val table1 = document.tables[0]
     table1.getRow(0).getCell(1).text = where
@@ -48,9 +41,5 @@ fun oline(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{ fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }
