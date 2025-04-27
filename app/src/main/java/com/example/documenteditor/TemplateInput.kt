@@ -30,72 +30,35 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.documenteditor.templatesFun.ApplicationForFamiliarizationWithTheCaseMaterials
 import com.example.documenteditor.templatesFun.ApplicationForInitiationOfSoleProprietorship
+import com.example.documenteditor.templatesFun.DataStore
+import com.example.documenteditor.templatesFun.aftei
+import com.example.documenteditor.templatesFun.egorov
 import com.example.documenteditor.templatesFun.incasso
+import com.example.documenteditor.templatesFun.oline
 import com.example.documenteditor.templatesFun.test
 import org.apache.poi.xwpf.usermodel.XWPFDocument
+import java.util.prefs.Preferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: NavHostController, workFile: String) {
-    // Хранение значений полей в виде карты (ключ - id поля, значение - введенное пользователем значение)
-    val fieldValues = remember { mutableStateMapOf<String, String>() }
+    // Хранение значений полей в виде словаря (ключ - id поля, значение - введенное пользователем значение)
     val context = LocalContext.current
-    var selectedTemplate by remember { mutableStateOf(templates[templateId]) }
-    val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
-        if (uri != null){
-            val templateDocument = XWPFDocument(context.assets.open(workFile))
-            val document = when(selectedTemplate.id){
-                0 -> {
-                    incasso(
-                        document = templateDocument,
-                        where= fieldValues["Куда"].toString(),
-                        recover = fieldValues["Взыскатель"].toString(),
-                        recoverInit = fieldValues["Инициалы взыскателя"].toString(),
-                        recoverInfo = fieldValues["Информация о взыскателе"].toString(),
-                        recoverRp = fieldValues["ФИО взыскателя в родительном падеже"].toString(),
-                        debtor = fieldValues["Должник"].toString(),
-                        debtorInfo = fieldValues["Инфа о должнике"].toString(),
-                        listNumber = fieldValues["Номер листа"].toString(),
-                        caseNumber = fieldValues["Номер дела"].toString(),
-                        courtIssue= fieldValues["Каким судом выдан"].toString(),
-                        money = fieldValues["Информация о взыскиваемых средствах"].toString(),
-                        sumMoney = fieldValues["Сумма Долга"].toString(),
-                        requisites =fieldValues["Реквизиты"].toString()
-                    )
-                }
-                1 -> {
-                    ApplicationForInitiationOfSoleProprietorship(
-                        templateDocument,
-                        fieldValues["В какой суд"].toString(),
-                        fieldValues["Взыскатель"].toString(),
-                        fieldValues["Инициалы взыскателя"].toString(),
-                        fieldValues["Информация о взыскателе"].toString(),
-                        fieldValues["Должник"].toString(),
-                        fieldValues["ФИО должника в родительном падеже"].toString(),
-                        fieldValues["Информация о должнике"].toString(),
-                        fieldValues["Инициалы должника"].toString(),
-                        fieldValues["Получатель (по умолчанию взыскатель)"].toString(),
-                        fieldValues["Дата вступления в законную силу"].toString(),
-                        fieldValues["Дата выдачи исполнительного листа"].toString(),
-                        fieldValues["Номер листа и дата"].toString(),
-                        fieldValues["Информация о суде"].toString(),
-                        fieldValues["Номер дела"].toString(),
-                        fieldValues["Полная сумма долга"].toString(),
-                        fieldValues["Сведения о требовании"].toString(),
-                        fieldValues["Реквизиты"].toString(),
-                    )
-                }
-                else -> {
-                    null
-                }
-            }
 
-            context.contentResolver.openOutputStream(uri)?.use {outputStream ->
-                document?.write(outputStream)
-            }
+    val fieldValues = remember { mutableStateMapOf<String, String>() }
+    var selectedTemplate by remember { mutableStateOf(templates[templateId]) }
+
+    val viewModel = viewModel<SaveViewModel>()
+    val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
+        uri?.let {
+            viewModel.save(context, it, selectedTemplate, fieldValues, workFile)
         }
     }
 

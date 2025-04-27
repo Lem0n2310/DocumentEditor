@@ -6,23 +6,24 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
+
 fun oline(
     document:XWPFDocument,
-    where : String,
-    role : String,
-    applicant : String,
-    applicantInit: String,
-    applicantInfo: String,
-    caseNum: String,
-    date: String,
-    courtConnect:String
+    where : String, // куда
+    role : String,// роль заявителя
+    applicant : String, //заявитель
+    applicantInit: String, // инициалы заявителя
+    applicantInfo: String, // инфа о заявителе
+    caseNum: String, // номер дела
+    date: String,// дата заседания
+    courtConnect:String //Суды для организации конфернеции
 ): XWPFDocument {
     val splitedCourtConnect = courtConnect.split(", ")
 
     //Словарь для замены
     val replace = mapOf(
         "ДАТА" to date,
-        "ДАТА" to caseNum,
+        "ДЕЛО" to caseNum,
         "ЗИН" to applicantInit
     )
 
@@ -34,7 +35,7 @@ fun oline(
 
     val table2 = document.tables[1]
     for(court in splitedCourtConnect){
-        table2.getRow(splitedCourtConnect.indexOf(court)-1)
+        table2.getRow(splitedCourtConnect.indexOf(court))
             .getCell(1).text = court
     }
 

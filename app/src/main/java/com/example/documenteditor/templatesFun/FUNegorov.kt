@@ -6,19 +6,20 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
+//Заявление на выдачу решения егоров
 fun egorov(
     document: XWPFDocument,
-    where: String,
-    address : String,
-    firstRole: String,
-    applicant: String,
-    applicantInit: String,
-    applicantInfo: String,
-    secondRole: String,
-    second: String,
-    secondInfo: String,
-    caseNumber: String,
-    text: String,
+    where: String, // Куда
+    address : String, // адресс суда
+    firstRole: String, // роль заявителя
+    applicant: String, // заявитель
+    applicantInit: String, // инициалы заявителя
+    applicantInfo: String, // инфа о заявителе
+    secondRole: String, // роль второй сторны
+    second: String, // вторая сторона
+    secondInfo: String, //Информация о второй стороне
+    caseNumber: String, // номер дела
+    text: String, //текст заявления
 ): XWPFDocument {
     //Словарь для замены
     val replace = mapOf(

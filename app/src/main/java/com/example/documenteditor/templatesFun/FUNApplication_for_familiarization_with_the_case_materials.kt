@@ -9,12 +9,12 @@ import java.io.FileOutputStream
 // Ходатайство об ознакомлении
 fun ApplicationForFamiliarizationWithTheCaseMaterials(
     document: XWPFDocument,
-    where: String,
-    role: String,
-    applicant: String,
-    applicantInit: String,
-    caseNum: String,
-    phoneNum: String,
+    where: String, //куда
+    role: String, // роль заявителя
+    applicant: String, // заявитель
+    applicantInit: String, // Инициалы заявителя
+    caseNum: String,// номер дела
+    phoneNum: String, // Номер телефона
     ): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(
