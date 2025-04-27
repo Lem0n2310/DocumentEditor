@@ -6,17 +6,16 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.FileInputStream
 import java.io.FileOutputStream
 
-
+//Ходатайство о выдаче
 fun aftei(
     document: XWPFDocument,
-    where :String,
-    role :String,
-    applicant :String,
-    caseNum :String,
-    about :String,
-    text :String,
-    listApp :String,
-    applicantInit :String,
+    where :String, // куда
+    role :String, //Роль заявителя
+    applicant :String, // заявитель
+    applicantInit :String, // инициалы заявителя
+    caseNum :String, // номер дела
+    about :String, // О чем ходатайство
+    text :String, // текст ходатайства
 ): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(

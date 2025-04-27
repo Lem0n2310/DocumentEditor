@@ -40,13 +40,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.documenteditor.templatesFun.DataStore
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.util.prefs.Preferences
 import javax.xml.transform.Templates
 // Единственная Мэйн Активити
 class MainActivity : ComponentActivity() {

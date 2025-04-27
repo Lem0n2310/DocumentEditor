@@ -12,7 +12,7 @@ val templates = listOf(
             DocumentField(label = "Информация о взыскателе"),
             DocumentField(label = "ФИО взыскателя в родительном падеже"),
             DocumentField(label = "Должник"),
-            DocumentField(label = "Инфа о должнике"),
+            DocumentField(label = "Информация о должнике"),
             DocumentField(label = "Номер листа"),
             DocumentField(label = "Номер дела"),
             DocumentField(label = "Каким судом выдан"),
@@ -49,6 +49,70 @@ val templates = listOf(
 
     DocumentTemplate(
         id = 2,
+        nameForUser = "Ходатайство об ознакомлении",
+        nameForDevelop = "RBA pattern.docx",
+        fields = listOf(
+            DocumentField(label = "Куда"),
+            DocumentField(label = "Роль заявителя"),
+            DocumentField(label = "Заявитель"),
+            DocumentField(label = "Инициалы заявителя"),
+            DocumentField(label = "Номер дела"),
+            DocumentField(label = "Номер телефона"),
+        )
+    ),
+
+    DocumentTemplate(
+        id = 3,
+        nameForUser = "Ходатайство о выдаче",
+        nameForDevelop = "Mogil pattern.docx",
+        fields = listOf(
+            DocumentField(label = "Куда"),
+            DocumentField(label = "Роль заявителя"),
+            DocumentField(label = "Заявитель"),
+            DocumentField(label = "Инициалы заявителя"),
+            DocumentField(label = "Номер дела"),
+            DocumentField(label = "О чем ходатайство"),
+            DocumentField(label = "Текст ходатайства"),
+        )
+    ),
+
+    DocumentTemplate(
+        id = 4,
+        nameForUser = "Заявление на выдачу решения егоров",
+        nameForDevelop = "Egorov pattern.docx",
+        fields = listOf(
+            DocumentField(label = "Куда"),
+            DocumentField(label = "Адресс суда"),
+            DocumentField(label = "Роль заявителя"),
+            DocumentField(label = "Заявитель"),
+            DocumentField(label = "Инициалы заявителя"),
+            DocumentField(label = "Информация о заявителе"),
+            DocumentField(label = "Роль второй сторны"),
+            DocumentField(label = "Вторая сторона"),
+            DocumentField(label = "Информация о второй стороне"),
+            DocumentField(label = "Номер дела"),
+            DocumentField(label = "Текст заявления"),
+        )
+    ),
+
+    DocumentTemplate(
+        id = 5,
+        nameForUser = "Ходатайство о проведении онлайн суда",
+        nameForDevelop = "online pattern.docx",
+        fields = listOf(
+            DocumentField(label = "Куда"),
+            DocumentField(label = "Роль заявителя"),
+            DocumentField(label = "Заявитель"),
+            DocumentField(label = "Инициалы заявителя"),
+            DocumentField(label = "Информация о заявителе"),
+            DocumentField(label = "Номер дела"),
+            DocumentField(label = "Дата заседания"),
+            DocumentField(label = "Суды для организации конфернеции"),
+        )
+    ),
+
+    DocumentTemplate(
+        id = 6,
         nameForUser = "test",
         nameForDevelop = "Test.docx",
         fields = listOf(
@@ -58,6 +122,4 @@ val templates = listOf(
             DocumentField(label = "name4"),
         )
     ),
-
-
 )
