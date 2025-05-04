@@ -30,21 +30,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.documenteditor.templatesFun.ApplicationForFamiliarizationWithTheCaseMaterials
-import com.example.documenteditor.templatesFun.ApplicationForInitiationOfSoleProprietorship
-import com.example.documenteditor.templatesFun.DataStore
-import com.example.documenteditor.templatesFun.aftei
-import com.example.documenteditor.templatesFun.egorov
-import com.example.documenteditor.templatesFun.incasso
-import com.example.documenteditor.templatesFun.oline
-import com.example.documenteditor.templatesFun.test
-import org.apache.poi.xwpf.usermodel.XWPFDocument
-import java.util.prefs.Preferences
+import com.example.documenteditor.templatesFun.FieldValuesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,19 +41,22 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     // Хранение значений полей в виде словаря (ключ - id поля, значение - введенное пользователем значение)
     val context = LocalContext.current
 
-    val fieldValues = remember { mutableStateMapOf<String, String>() }
+    val saveViewModel = viewModel<SaveViewModel>()
+    val fieldViewModel = viewModel<FieldValuesViewModel>()
+
     var selectedTemplate by remember { mutableStateOf(templates[templateId]) }
 
-    val viewModel = viewModel<SaveViewModel>()
+
     val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
         uri?.let {
-            viewModel.save(context, it, selectedTemplate, fieldValues, workFile)
+            saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
         }
     }
 
     val save: () -> Unit = {
         createDocumentLauncher.launch(selectedTemplate.nameForUser + ".docx")
     }
+
 
     Box(modifier = Modifier.fillMaxSize()
         .background(Color(0xff9DA7E8)),
@@ -81,9 +73,9 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
                     // Текстовое поле для ввода
                     TextField(
                         modifier =Modifier.padding(vertical = 10.dp),
-                        value = fieldValues[field.label]?: "", // Получаем текущее значение или пустую строку
+                        value = fieldViewModel.fieldValues[field.label]?: "", // Получаем текущее значение или пустую строку
                         onValueChange = {
-                            fieldValues[field.label] = it
+                            fieldViewModel.updateValue(key= field.label, value = it)
                             }, // Обновляем значение при изменении
                         label = { Text(field.label) } // Отображаем метку поля
                     )
