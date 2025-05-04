@@ -40,7 +40,8 @@ import androidx.compose.runtime.remember as remember
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: NavHostController, workFile: String) {
-    var saveAcces: MutableState<Boolean> = remember { mutableStateOf(false) } //переменная, проверяющая заполнение всех полей и дозволяющая сохранить документ
+    var saveAcces: MutableState<Boolean> = remember { mutableStateOf(false) } //переменная, проверяющая
+    var verification: MutableState<Boolean> = remember { mutableStateOf(true) }
 
     // Хранение значений полей в виде карты (ключ - id поля, значение - введенное пользователем значение)
     val fieldValues = remember { mutableStateMapOf<String, String>() }
@@ -131,11 +132,12 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
                         isError = (fieldValues[field.label]?: "") == ""
                     )
                     if ((fieldValues[field.label]?: "") == "") {
-                        saveAcces.value = false
+                        verification.value = false
                     }
                 }
 
         }
+        saveAcces.value = !verification.value
     }
 
 
@@ -157,15 +159,14 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
             }
         },
         actions = {
-            if (saveAcces.value){
+            if (verification.value){
                 IconButton(
                     onClick = { save() }
                 ) {
                     Icon(imageVector = Icons.Default.Check, contentDescription = null)
                 }
-
             }
-            saveAcces.value = true
+            verification.value = true
 
         }
     )
