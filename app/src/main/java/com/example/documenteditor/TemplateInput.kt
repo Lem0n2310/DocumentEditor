@@ -21,10 +21,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,12 +34,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.documenteditor.templatesFun.ApplicationForInitiationOfSoleProprietorship
 import com.example.documenteditor.templatesFun.incasso
-import com.example.documenteditor.templatesFun.test
 import org.apache.poi.xwpf.usermodel.XWPFDocument
+import androidx.compose.runtime.remember as remember
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: NavHostController, workFile: String) {
+    var saveAcces: MutableState<Boolean> = remember { mutableStateOf(false) } //переменная, проверяющая заполнение всех полей и дозволяющая сохранить документ
+
     // Хранение значений полей в виде карты (ключ - id поля, значение - введенное пользователем значение)
     val fieldValues = remember { mutableStateMapOf<String, String>() }
     val context = LocalContext.current
@@ -103,13 +105,16 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         createDocumentLauncher.launch(selectedTemplate.nameForUser + ".docx")
     }
 
-    Box(modifier = Modifier.fillMaxSize()
+    Box(modifier = Modifier
+        .fillMaxSize()
         .background(Color(0xff9DA7E8)),
         contentAlignment = Alignment.Center,
     ) {
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 100.dp, bottom = 80.dp).imePadding()
+            modifier = Modifier
+                .padding(top = 100.dp, bottom = 80.dp)
+                .imePadding()
         )
             { // Используем Column для вертикального расположения полей
                 // Проходим по всем полям выбранного шаблона
@@ -117,16 +122,22 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
                     // В зависимости от типа поля отображаем соответствующий компонент
                     // Текстовое поле для ввода
                     TextField(
-                        modifier =Modifier.padding(vertical = 10.dp),
+                        modifier = Modifier.padding(vertical = 10.dp),
                         value = fieldValues[field.label]?: "", // Получаем текущее значение или пустую строку
                         onValueChange = {
                             fieldValues[field.label] = it
                             }, // Обновляем значение при изменении
-                        label = { Text(field.label) } // Отображаем метку поля
+                        label = { Text(field.label) }, // Отображаем метку поля
+                        isError = (fieldValues[field.label]?: "") == ""
                     )
+                    if ((fieldValues[field.label]?: "") == "") {
+                        saveAcces.value = false
+                    }
                 }
+
         }
     }
+
 
     // Снэек бар с подписью местонахождения и кнопкой назад
     TopAppBar(
@@ -146,12 +157,16 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
             }
         },
         actions = {
-            IconButton(onClick = { save() }) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = null
-                )
+            if (saveAcces.value){
+                IconButton(
+                    onClick = { save() }
+                ) {
+                    Icon(imageVector = Icons.Default.Check, contentDescription = null)
+                }
+
             }
+            saveAcces.value = true
+
         }
     )
 }
