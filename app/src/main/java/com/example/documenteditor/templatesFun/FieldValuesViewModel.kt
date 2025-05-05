@@ -9,4 +9,8 @@ class FieldValuesViewModel: ViewModel() {
     fun updateValue(key: String, value: String){
         fieldValues[key] = value
     }
+
+    fun clearValues(){
+        fieldValues.clear()
+    }
 }

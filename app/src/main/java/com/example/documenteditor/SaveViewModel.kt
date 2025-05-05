@@ -21,6 +21,8 @@ import com.example.documenteditor.templatesFun.oline
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 
 class SaveViewModel: ViewModel() {
+    var isFileSaved by  mutableStateOf(false)
+
     fun save(
         context: Context,
         uri: Uri,
@@ -129,6 +131,7 @@ class SaveViewModel: ViewModel() {
 
         context.contentResolver.openOutputStream(uri)?.use{outputStream ->
             document?.write(outputStream)
+            isFileSaved = true
         }
     }
 }

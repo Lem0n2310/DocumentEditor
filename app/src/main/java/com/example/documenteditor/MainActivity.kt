@@ -51,6 +51,9 @@ fun MyNav(){
                 navController = navController
             )
         }
+        composable<SettingsScreenRoute>{
+            SettingsScreen(navController)
+        }
         composable<TemplateRoute> {// Отрисовка звполнения шаблонов
             val templateId = it.toRoute<TemplateRoute>().templateId
             val nameForDev = it.toRoute<TemplateRoute>().nameForDev

@@ -13,3 +13,6 @@ object TemplatePickerRoute // Выбор шаблона
 
 @Serializable
 data class TemplateRoute(val templateId: Int, val nameForDev: String) // Заполнение шаблона
+
+@Serializable
+object SettingsScreenRoute // Экран настроек
