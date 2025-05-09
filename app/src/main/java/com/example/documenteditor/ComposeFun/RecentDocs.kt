@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ComposeFun
 
 import android.content.Context
 import android.widget.Toast

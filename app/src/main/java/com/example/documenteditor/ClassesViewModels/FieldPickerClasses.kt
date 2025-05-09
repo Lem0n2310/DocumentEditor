@@ -1,5 +1,7 @@
-package com.example.documenteditor
+package com.example.documenteditor.ClassesViewModels
 
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.lifecycle.ViewModel
 import kotlinx.serialization.Serializable
 
 // Класс описывающий поле

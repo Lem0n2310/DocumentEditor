@@ -1,10 +1,7 @@
 package com.example.documenteditor.templatesFun
 
-import com.example.documenteditor.getFile
-import com.example.documenteditor.textChange
+import com.example.documenteditor.functions.textChange
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
 //Ходатайство о выдаче
 fun aftei(

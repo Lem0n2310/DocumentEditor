@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ClassesViewModels
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -20,24 +20,24 @@ class SettingDataStore(private val dataStore: DataStore<Preferences>): ViewModel
         }
     }
 
-
+    // Настройка сохранения введенных значений (останутся ли они после сохранения файла)
     val saveValuesKey: Preferences.Key<Boolean> = booleanPreferencesKey("SaveValueSetting")
     val isSaveValue: Flow<Boolean> = dataStore.data
         .map { preferences ->
             preferences[saveValuesKey] ?: true // по умолчанию true
         }
 
-
-    val showAlertFlagKey = booleanPreferencesKey("ShowAlertFlagKey")
-    val showAlertFlag: Flow<Boolean> = dataStore.data
+    // Настройка диалога для сохранения введенных значений
+    val showLeaveValueAlertFlagKey = booleanPreferencesKey("showLeaveValueAlertFlagKey")
+    val showLeaveValueAlertFlag: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[showAlertFlagKey] ?: true // по умолчанию true
+            preferences[showLeaveValueAlertFlagKey] ?: true // по умолчанию true
         }
 
-
-    val askAlertKey = booleanPreferencesKey("AskAlertKey")
-    val askAlert: Flow<Boolean> = dataStore.data
+    // Настройка проверки введе=ённых значений (все ли?)
+    val showCheckValuesFlagKey = booleanPreferencesKey("isAllValuesFlagKey")
+    val showCheckValuesFlag: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[askAlertKey] ?: true // по умолчанию true
+            preferences[showCheckValuesFlagKey] ?: true
         }
 }

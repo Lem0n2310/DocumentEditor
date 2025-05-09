@@ -1,7 +1,7 @@
-package com.example.documenteditor
+package com.example.documenteditor.functions
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-
+// изменение текста в файле
 fun textChange(document: XWPFDocument, replace: Map<String, String>){
     document.paragraphs.forEach { paragraph ->
         replace.forEach { (oldWord, newWord) ->

@@ -18,6 +18,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.documenteditor.ClassesViewModels.MainScreenRoute
+import com.example.documenteditor.ClassesViewModels.Screen2Route
+import com.example.documenteditor.ClassesViewModels.SettingsScreenRoute
+import com.example.documenteditor.ClassesViewModels.TemplatePickerRoute
+import com.example.documenteditor.ClassesViewModels.TemplateRoute
+import com.example.documenteditor.ClassesViewModels.templates
+import com.example.documenteditor.ComposeFun.MainScreen
+import com.example.documenteditor.ComposeFun.RecentDocs
+import com.example.documenteditor.ComposeFun.SettingsScreen
+import com.example.documenteditor.ComposeFun.Template
+import com.example.documenteditor.ComposeFun.TemplatePicker
 
 
 // Единственная Мэйн Активити

@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ComposeFun
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,29 +11,25 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.documenteditor.ClassesViewModels.Screen2Route
+import com.example.documenteditor.ClassesViewModels.SettingsScreenRoute
+import com.example.documenteditor.ClassesViewModels.TemplatePickerRoute
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,7 +45,7 @@ fun MainScreen(navController: NavHostController) {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet{
+                ModalDrawerSheet{//Боковое окно
                     Scaffold(
                         bottomBar = {
                             BottomAppBar {
@@ -67,7 +63,7 @@ fun MainScreen(navController: NavHostController) {
                                 }
                             }
                         },
-                        content = {}
+                        content ={}// Потом добавим Recent docs
                     )
                 }
             },

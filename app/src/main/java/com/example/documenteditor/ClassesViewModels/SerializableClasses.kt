@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ClassesViewModels
 
 import kotlinx.serialization.Serializable
 // Классы для нава

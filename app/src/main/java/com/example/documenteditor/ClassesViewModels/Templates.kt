@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ClassesViewModels
 
 val templates = listOf(
     DocumentTemplate(
