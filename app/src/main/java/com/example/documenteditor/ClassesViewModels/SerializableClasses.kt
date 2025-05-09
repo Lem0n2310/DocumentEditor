@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ClassesViewModels
 
 import kotlinx.serialization.Serializable
 // Классы для нава
@@ -13,3 +13,6 @@ object TemplatePickerRoute // Выбор шаблона
 
 @Serializable
 data class TemplateRoute(val templateId: Int, val nameForDev: String) // Заполнение шаблона
+
+@Serializable
+object SettingsScreenRoute // Экран настроек

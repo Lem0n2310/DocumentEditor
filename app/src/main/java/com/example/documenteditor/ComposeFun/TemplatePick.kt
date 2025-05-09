@@ -1,4 +1,4 @@
-package com.example.documenteditor
+package com.example.documenteditor.ComposeFun
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.example.documenteditor.ClassesViewModels.DocumentTemplate
+import com.example.documenteditor.ClassesViewModels.TemplateRoute
+
 // Выбор шаблона
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

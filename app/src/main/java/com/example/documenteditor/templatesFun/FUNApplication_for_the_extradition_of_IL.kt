@@ -1,27 +1,19 @@
 package com.example.documenteditor.templatesFun
 
-import com.example.documenteditor.getFile
-import com.example.documenteditor.textChange
+import com.example.documenteditor.functions.textChange
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
-
+//Ходатайство о выдаче
 fun aftei(
-    userSaveWay: String,
-    name:String,
-    where :String,
-    role :String,
-    applicant :String,
-    caseNum :String,
-    about :String,
-    text :String,
-    listApp :String,
-    applicantInit :String,
-){
-    // Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
-
+    document: XWPFDocument,
+    where :String, // куда
+    role :String, //Роль заявителя
+    applicant :String, // заявитель
+    applicantInit :String, // инициалы заявителя
+    caseNum :String, // номер дела
+    about :String, // О чем ходатайство
+    text :String, // текст ходатайства
+): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(
         "ОЧЕМ" to about,
@@ -29,8 +21,6 @@ fun aftei(
         "ЗИН" to applicantInit
     )
     // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
-
     val table1 = document.tables[0]
     table1.getRow(0).getCell(1).text = where
     table1.getRow(2).getCell(0).text = role
@@ -46,9 +36,5 @@ fun aftei(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }

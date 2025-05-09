@@ -1,6 +1,6 @@
 package com.example.documenteditor.templatesFun
 
-import com.example.documenteditor.textChange
+import com.example.documenteditor.functions.textChange
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 
 fun test(

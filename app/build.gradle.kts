@@ -62,4 +62,5 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.apache.poi:poi:5.2.3")          // Основная библиотека POI
     implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation(libs.androidx.datastore.preferences)
 }

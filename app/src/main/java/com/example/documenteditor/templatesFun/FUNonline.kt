@@ -1,37 +1,28 @@
 package com.example.documenteditor.templatesFun
 
-import com.example.documenteditor.getFile
-import com.example.documenteditor.textChange
+import com.example.documenteditor.functions.textChange
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import java.io.FileInputStream
-import java.io.FileOutputStream
+
 
 fun oline(
-    userSaveWay : String,
-    name: String,
-    where : String,
-    role : String,
-    applicant : String,
-    applicantInit: String,
-    applicantInfo: String,
-    caseNum: String,
-    date: String,
-    courtConnect:String
-){
+    document:XWPFDocument,
+    where : String, // куда
+    role : String,// роль заявителя
+    applicant : String, //заявитель
+    applicantInit: String, // инициалы заявителя
+    applicantInfo: String, // инфа о заявителе
+    caseNum: String, // номер дела
+    date: String,// дата заседания
+    courtConnect:String //Суды для организации конфернеции
+): XWPFDocument {
     val splitedCourtConnect = courtConnect.split(", ")
-
-    //Создание файла
-    val workFile = getFile("IE pattern.docx", userSaveWay = userSaveWay, name = name)
 
     //Словарь для замены
     val replace = mapOf(
         "ДАТА" to date,
-        "ДАТА" to caseNum,
+        "ДЕЛО" to caseNum,
         "ЗИН" to applicantInit
     )
-
-    // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
 
     val table1 = document.tables[0]
     table1.getRow(0).getCell(1).text = where
@@ -41,16 +32,12 @@ fun oline(
 
     val table2 = document.tables[1]
     for(court in splitedCourtConnect){
-        table2.getRow(splitedCourtConnect.indexOf(court)-1)
+        table2.getRow(splitedCourtConnect.indexOf(court))
             .getCell(1).text = court
     }
 
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{ fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }

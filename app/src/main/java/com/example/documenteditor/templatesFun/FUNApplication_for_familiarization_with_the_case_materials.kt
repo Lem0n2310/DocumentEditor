@@ -1,28 +1,18 @@
 package com.example.documenteditor.templatesFun
 
-import com.example.documenteditor.getFile
-import com.example.documenteditor.textChange
+import com.example.documenteditor.functions.textChange
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
 // Ходатайство об ознакомлении
 fun ApplicationForFamiliarizationWithTheCaseMaterials(
-    userSaveWay: String,
-    name: String,
-    where: String,
-    role: String,
-    applicant: String,
-    applicantInit: String,
-    caseNum: String,
-    phoneNum: String,
-    ){
-    // Создание файла
-    val workFile = getFile("RBA pattern.docx", userSaveWay = userSaveWay, name = name)
-
-    // Заведение всех данных
-
-
+    document: XWPFDocument,
+    where: String, //куда
+    role: String, // роль заявителя
+    applicant: String, // заявитель
+    applicantInit: String, // Инициалы заявителя
+    caseNum: String,// номер дела
+    phoneNum: String, // Номер телефона
+    ): XWPFDocument {
     // Словарь для замены
     var replace = mapOf(
         "КУДА" to where,
@@ -30,9 +20,6 @@ fun ApplicationForFamiliarizationWithTheCaseMaterials(
         "НОМЕР" to phoneNum,
         "ЗИН" to applicantInit
     )
-
-    // Замена по таблицам
-    val document = XWPFDocument(FileInputStream(workFile))
 
     // Замена по таблицам
     val table1 = document.tables[0]
@@ -50,10 +37,6 @@ fun ApplicationForFamiliarizationWithTheCaseMaterials(
     // Замена по тексту
     textChange(document, replace)
 
-    FileOutputStream(workFile).use{fos ->
-        document.write(fos)
-    }
-
-    document.close()
+    return document
 }
 
