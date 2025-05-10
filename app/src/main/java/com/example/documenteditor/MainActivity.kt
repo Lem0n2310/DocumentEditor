@@ -1,6 +1,8 @@
 
 package com.example.documenteditor
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,6 +37,10 @@ import com.example.documenteditor.ComposeFun.TemplatePicker
 // Единственная Мэйн Активити
 class MainActivity : ComponentActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
+
+    // Инициализация хранилища путей для недавних документов
+    val recentDocs = getSharedPreferences("recentDocs", MODE_PRIVATE)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -43,7 +50,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 
 @Composable
-fun MyNav(){
+fun MyNav() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,

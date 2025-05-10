@@ -43,6 +43,7 @@ import com.example.documenteditor.ClassesViewModels.FieldValuesViewModel
 import com.example.documenteditor.ClassesViewModels.SaveViewModel
 import com.example.documenteditor.ClassesViewModels.SettingDataStore
 import com.example.documenteditor.ClassesViewModels.dataStore
+import com.example.documenteditor.functions.getFilePath
 import com.example.documenteditor.functions.isFull
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,7 +83,9 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
         uri?.let {
             saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
+
         }
+
     }
 
     val save: () -> Unit = {

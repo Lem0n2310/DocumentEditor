@@ -83,37 +83,3 @@ fun showMessage(message: String, context: Context){
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
 }
-/*
-@Composable
-fun dialogs() {
-    var dialogVisible = true
-    if (dialogVisible) {
-        AlertDialog(
-            onDismissRequest = {
-                dialogVisible = false
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        dialogVisible = false
-                    }
-                ) {
-                    Text("Ок")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        dialogVisible = false
-                    }
-                ) {
-                    Text("Ура!")
-                }
-            },
-            title = { Text("Документик!") },
-            text = { Text("Как вам?") }
-        )
-    }
-}
-
- */
