@@ -1,6 +1,7 @@
 package com.example.documenteditor.ComposeFun
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,16 +51,18 @@ fun MainScreen(navController: NavHostController) {
                         bottomBar = {
                             BottomAppBar {
                                 Row(
-                                    verticalAlignment = Alignment.CenterVertically
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.clickable(onClick = {navController.navigate(SettingsScreenRoute)})
                                 ){
-                                    IconButton({navController.navigate(SettingsScreenRoute)}) {
-                                        Icon(
-                                            Icons.Default.Settings,
-                                            contentDescription = null,
-                                            tint = Color.Blue
-                                        )
-                                    }
-                                    Text("Настройки")
+                                    Icon(
+                                        Icons.Default.Settings,
+                                        contentDescription = null,
+                                        tint = Color.Blue,
+                                    )
+
+                                    Text("Настройки",
+                                        modifier = Modifier.padding(start = 20.dp)
+                                    )
                                 }
                             }
                         },

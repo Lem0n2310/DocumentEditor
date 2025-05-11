@@ -224,7 +224,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 100.dp, bottom = 80.dp)
+                .padding(top = 110.dp, bottom = 80.dp)
                 .imePadding()
         )
             { // Используем Column для вертикального расположения полей
