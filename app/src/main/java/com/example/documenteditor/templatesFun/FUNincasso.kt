@@ -20,12 +20,6 @@ fun incasso(
     sumMoney : String, //Сумма Долга
     requisites: String,// Реквизиты
 ):XWPFDocument{
-    val req = mutableMapOf(
-        "bank" to "shit",
-        "valuta" to "ruble",
-        "doljnik" to "xyesos"
-    )
-
     // Словарь для замены
     val replace = mapOf(
         "НОМЕРЛИСТА" to listNumber,
@@ -49,11 +43,7 @@ fun incasso(
     table1.getRow(4).getCell(1).text = "$debtor \n $debtorInfo"
 
     val table2 = document.tables[1]
-    req.entries.forEachIndexed {
-            i, (key, value) -> val row = table2.getRow(i)
-        row.getCell(0).text = key
-        row.getCell(1).text = value
-    }
+    table2.getRow(0).getCell(0).text = requisites
 
     // Замена по тексту
     textChange(document, replace)
