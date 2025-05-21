@@ -73,7 +73,7 @@ fun RecentDocs(navController: NavHostController){
                             Button(
                                 modifier = Modifier,
                                 onClick = {
-                                    openDocxFile(context, path)
+                                    openDocxFile(context, path) // #TODO Починить
                                 }
                             ) {
                                 Column(modifier = Modifier.fillMaxWidth()) {
