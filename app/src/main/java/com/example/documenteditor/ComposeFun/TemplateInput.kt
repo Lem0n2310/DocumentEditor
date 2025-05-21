@@ -90,7 +90,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         uri?.let {
             saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
             // Добавление нового экземпляра документа в датабазу
-            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , uri = it.toString(), type = selectedTemplate.nameForUser)
+            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , path = it.toString(), type = selectedTemplate.nameForUser)
             mDocumentViewModel.addDocument(document)
             Toast.makeText(context, "Документ создан!", Toast.LENGTH_SHORT).show()
         }
