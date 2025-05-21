@@ -63,7 +63,7 @@ fun MainScreen(navController: NavHostController) {
                                 }
                             }
                         },
-                        content = {}// Потом добавим Recent docs
+                        content = { }// Потом добавим Recent docs
                     )
                 }
             },
