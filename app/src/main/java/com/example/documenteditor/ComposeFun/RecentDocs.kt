@@ -1,6 +1,7 @@
 package com.example.documenteditor.ComposeFun
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,9 @@ fun RecentDocs(navController: NavHostController){
     }
     val keys = stub.keys
     val context = LocalContext.current
+    val recentDocs = context.getSharedPreferences("recentDocs", MODE_PRIVATE)
+    
+
 
     Box(modifier = Modifier.fillMaxSize()){
         Box(

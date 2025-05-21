@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.documenteditor.ComposeFun
 
 import android.net.Uri
@@ -43,8 +45,11 @@ import com.example.documenteditor.ClassesViewModels.FieldValuesViewModel
 import com.example.documenteditor.ClassesViewModels.SaveViewModel
 import com.example.documenteditor.ClassesViewModels.SettingDataStore
 import com.example.documenteditor.ClassesViewModels.dataStore
+import com.example.documenteditor.functions.getFileNameFromUri
 import com.example.documenteditor.functions.getFilePath
 import com.example.documenteditor.functions.isFull
+import database.Document
+import database.DocumentViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -60,6 +65,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     val saveViewModel = viewModel<SaveViewModel>() // вьюха сохранения
     val fieldViewModel = viewModel<FieldValuesViewModel>() // вьюха полей ввода
     val viewModel = viewModel<SettingDataStore>{ SettingDataStore(contextFlag.dataStore) } // Настройки
+    val mDocumentViewModel = viewModel<DocumentViewModel>()
 
     // флаги
     val showCheckValuesFlagSetting = viewModel.showCheckValuesFlag.collectAsState(true) // Показывть окно проверки заполнения данных (вообще)
@@ -83,7 +89,9 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     val createDocumentLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("*/*")) {uri: Uri? ->
         uri?.let {
             saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
-
+            // Добавление нового экземпляра документа в датабазу
+            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , path = getFilePath(context, it).toString(), type = selectedTemplate.nameForUser)
+            mDocumentViewModel.addDocument(document)
         }
 
     }

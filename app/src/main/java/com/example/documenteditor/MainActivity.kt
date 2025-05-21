@@ -37,10 +37,7 @@ import com.example.documenteditor.ComposeFun.TemplatePicker
 // Единственная Мэйн Активити
 class MainActivity : ComponentActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
-
     // Инициализация хранилища путей для недавних документов
-    val recentDocs = getSharedPreferences("recentDocs", MODE_PRIVATE)
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
