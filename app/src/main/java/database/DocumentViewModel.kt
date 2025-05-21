@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class DocumentViewModel(application: Application): AndroidViewModel(application) {
 
-    private val readAllData: LiveData<List<Document>>
+    val readAllData: LiveData<List<Document>>
     private val repository: DocumentRepository
 
     init {

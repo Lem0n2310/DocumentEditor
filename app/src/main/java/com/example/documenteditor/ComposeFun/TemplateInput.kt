@@ -3,6 +3,7 @@
 package com.example.documenteditor.ComposeFun
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -46,7 +47,6 @@ import com.example.documenteditor.ClassesViewModels.SaveViewModel
 import com.example.documenteditor.ClassesViewModels.SettingDataStore
 import com.example.documenteditor.ClassesViewModels.dataStore
 import com.example.documenteditor.functions.getFileNameFromUri
-import com.example.documenteditor.functions.getFilePath
 import com.example.documenteditor.functions.isFull
 import database.Document
 import database.DocumentViewModel
@@ -90,8 +90,9 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         uri?.let {
             saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
             // Добавление нового экземпляра документа в датабазу
-            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , path = getFilePath(context, it).toString(), type = selectedTemplate.nameForUser)
+            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , uri = it.toString(), type = selectedTemplate.nameForUser)
             mDocumentViewModel.addDocument(document)
+            Toast.makeText(context, "Документ создан!", Toast.LENGTH_SHORT).show()
         }
 
     }

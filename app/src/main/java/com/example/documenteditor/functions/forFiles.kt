@@ -1,26 +1,12 @@
 package com.example.documenteditor.functions
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-
-fun getFilePath(context: Context, uri: Uri): String? {
-    var cursor: Cursor? = null
-    val projection = arrayOf(MediaStore.Images.Media.DATA)
-    return try {
-        cursor = context.contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                it.getString(columnIndex)
-            } else null
-        }
-    } catch (e: Exception) {
-        null
-    }
-}
+import android.widget.Toast
 
 
 fun getFileNameFromUri(context: Context, uri: Uri): String? {
@@ -57,4 +43,34 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
     }
 
     return fileName
+}
+
+fun openDocxFromUri(context: Context, uri: Uri) {
+    try {
+        // Создаем Intent для просмотра файла
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            // Устанавливаем MIME-тип для DOCX
+            setDataAndType(uri, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
+            // Даем временное разрешение на чтение
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        // Проверяем, есть ли приложение для обработки этого Intent
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        } else {
+            showError(context, "Нет приложения для открытия DOCX")
+        }
+    } catch (e: ActivityNotFoundException) {
+        showError(context, "Приложение для DOCX не найдено")
+    } catch (e: SecurityException) {
+        showError(context, "Нет прав доступа к файлу")
+    } catch (e: Exception) {
+        showError(context, "Ошибка: ${e.localizedMessage}")
+    }
+}
+
+private fun showError(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }
