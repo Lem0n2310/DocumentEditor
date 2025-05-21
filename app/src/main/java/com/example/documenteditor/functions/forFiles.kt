@@ -7,7 +7,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.widget.Toast
-
+import androidx.core.content.FileProvider
+import java.io.File
 
 fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var fileName: String? = null
@@ -45,27 +46,36 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
     return fileName
 }
 
-fun openDocxFromUri(context: Context, uri: Uri) {
+
+
+fun openDocxFile(context: Context, filePath: String) {
+    val file = File(filePath)
+
+    // Проверка существования файла
+    if (!file.exists()) {
+        showError(context, "Файл не найден")
+        return
+    }
+
+    // Получение URI через FileProvider
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        file
+    )
+
+    // Создание Intent
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    // Попытка запуска
     try {
-        // Создаем Intent для просмотра файла
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            // Устанавливаем MIME-тип для DOCX
-            setDataAndType(uri, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-
-            // Даем временное разрешение на чтение
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-
-        // Проверяем, есть ли приложение для обработки этого Intent
-        if (intent.resolveActivity(context.packageManager) != null) {
-            context.startActivity(intent)
-        } else {
-            showError(context, "Нет приложения для открытия DOCX")
-        }
+        context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        showError(context, "Приложение для DOCX не найдено")
-    } catch (e: SecurityException) {
-        showError(context, "Нет прав доступа к файлу")
+        showError(context, "Нет приложения для открытия DOCX")
     } catch (e: Exception) {
         showError(context, "Ошибка: ${e.localizedMessage}")
     }
