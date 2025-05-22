@@ -3,6 +3,7 @@
 package com.example.documenteditor.ComposeFun
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -46,7 +47,6 @@ import com.example.documenteditor.ClassesViewModels.SaveViewModel
 import com.example.documenteditor.ClassesViewModels.SettingDataStore
 import com.example.documenteditor.ClassesViewModels.dataStore
 import com.example.documenteditor.functions.getFileNameFromUri
-import com.example.documenteditor.functions.getFilePath
 import com.example.documenteditor.functions.isFull
 import database.Document
 import database.DocumentViewModel
@@ -73,7 +73,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     val showLeaveValueAlertFlagSetting = viewModel.showLeaveValueAlertFlag.collectAsState(true) // Показывать окно сохранения введенных значений (для отображения вообще)
     var showLeaveValueDialog by remember { mutableStateOf(false) } // Показывать окно сохранения введенных значений (для отображения в нужный момент)
     val isSaveValue = viewModel.isSaveValue.collectAsState(true) // Сохранять введенные значения после сохранения
-    var forFlag by remember { mutableStateOf(true) } // Флаг добавления всех полей шаблона в словарь при первом запуске
+    var forFlag = fieldViewModel.forFlag// Флаг добавления всех полей шаблона в словарь при первом запуске
 
     // Шаблон
     val selectedTemplate by remember { mutableStateOf(templates[templateId]) } // Выбраный шаблон
@@ -82,7 +82,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         for(field in selectedTemplate.fields){
             fieldViewModel.fieldValues[field.label] = "" // каждому полю присваеваем значение ""
         }
-        forFlag = false //убираем флаг первого запуска
+        fieldViewModel.forFlag = false //убираем флаг первого запуска
     }
 
     // функции
@@ -90,8 +90,9 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         uri?.let {
             saveViewModel.save(context, it, selectedTemplate, fieldViewModel.fieldValues, workFile)
             // Добавление нового экземпляра документа в датабазу
-            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , path = getFilePath(context, it).toString(), type = selectedTemplate.nameForUser)
+            val document: Document = Document(0, name = getFileNameFromUri(context, it).toString() , path = it.toString(), type = selectedTemplate.nameForUser)
             mDocumentViewModel.addDocument(document)
+            Toast.makeText(context, "Документ создан!", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -235,7 +236,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 100.dp, bottom = 80.dp)
+                .padding(top = 110.dp, bottom = 80.dp)
                 .imePadding()
         )
             { // Используем Column для вертикального расположения полей

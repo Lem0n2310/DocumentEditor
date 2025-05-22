@@ -1,27 +1,14 @@
 package com.example.documenteditor.functions
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
-import android.provider.MediaStore
 import android.provider.OpenableColumns
-
-fun getFilePath(context: Context, uri: Uri): String? {
-    var cursor: Cursor? = null
-    val projection = arrayOf(MediaStore.Images.Media.DATA)
-    return try {
-        cursor = context.contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-                it.getString(columnIndex)
-            } else null
-        }
-    } catch (e: Exception) {
-        null
-    }
-}
-
+import android.widget.Toast
+import androidx.core.content.FileProvider
+import java.io.File
 
 fun getFileNameFromUri(context: Context, uri: Uri): String? {
     var fileName: String? = null
@@ -57,4 +44,43 @@ fun getFileNameFromUri(context: Context, uri: Uri): String? {
     }
 
     return fileName
+}
+
+
+
+fun openDocxFile(context: Context, filePath: String) {
+    val file = File(filePath)
+
+    // Проверка существования файла
+    if (!file.exists()) {
+        showError(context, "Файл не найден")
+        return
+    }
+
+    // Получение URI через FileProvider
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        file
+    )
+
+    // Создание Intent
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+
+    // Попытка запуска
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        showError(context, "Нет приложения для открытия DOCX")
+    } catch (e: Exception) {
+        showError(context, "Ошибка: ${e.localizedMessage}")
+    }
+}
+
+private fun showError(context: Context, message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }

@@ -4,10 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("kotlin-kapt") // Для обработки аннотаций
-    id("androidx.room") version "2.7.1" apply false
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
-    alias(libs.plugins.kotlinx.serialization) apply false
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -50,32 +48,8 @@ dependencies {
     val room_version = "2.7.1"
 
     implementation("androidx.room:room-runtime:$room_version")
-
-
-
-    // If this project only uses Java source, use the Java annotationProcessor
-    // No additional plugins are necessary
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
-    // optional - Kotlin Extensions and Coroutines support for Room
+    ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-
-    // optional - RxJava2 support for Room
-    implementation("androidx.room:room-rxjava2:$room_version")
-
-    // optional - RxJava3 support for Room
-    implementation("androidx.room:room-rxjava3:$room_version")
-
-    // optional - Guava support for Room, including Optional and ListenableFuture
-    implementation("androidx.room:room-guava:$room_version")
-
-    // optional - Test helpers
-    testImplementation("androidx.room:room-testing:$room_version")
-
-    // optional - Paging 3 Integration
-    implementation("androidx.room:room-paging:$room_version")
-
-
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
