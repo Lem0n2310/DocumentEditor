@@ -73,7 +73,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
     val showLeaveValueAlertFlagSetting = viewModel.showLeaveValueAlertFlag.collectAsState(true) // Показывать окно сохранения введенных значений (для отображения вообще)
     var showLeaveValueDialog by remember { mutableStateOf(false) } // Показывать окно сохранения введенных значений (для отображения в нужный момент)
     val isSaveValue = viewModel.isSaveValue.collectAsState(true) // Сохранять введенные значения после сохранения
-    var forFlag by remember { mutableStateOf(true) } // Флаг добавления всех полей шаблона в словарь при первом запуске
+    var forFlag = fieldViewModel.forFlag// Флаг добавления всех полей шаблона в словарь при первом запуске
 
     // Шаблон
     val selectedTemplate by remember { mutableStateOf(templates[templateId]) } // Выбраный шаблон
@@ -82,7 +82,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         for(field in selectedTemplate.fields){
             fieldViewModel.fieldValues[field.label] = "" // каждому полю присваеваем значение ""
         }
-        forFlag = false //убираем флаг первого запуска
+        fieldViewModel.forFlag = false //убираем флаг первого запуска
     }
 
     // функции
@@ -236,7 +236,7 @@ fun Template(templates: List<DocumentTemplate>, templateId: Int, navController: 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 100.dp, bottom = 80.dp)
+                .padding(top = 110.dp, bottom = 80.dp)
                 .imePadding()
         )
             { // Используем Column для вертикального расположения полей
